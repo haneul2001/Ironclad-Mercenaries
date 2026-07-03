@@ -1,8 +1,12 @@
 using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public class EnemySpawner : MonoBehaviour
 {
+    [Header("UI")]
+    public TMP_Text waveText;
+
     [Header("스폰 설정")]
     public GameObject enemyPrefab;
     public int enemiesPerWave = 5;
@@ -28,6 +32,11 @@ public class EnemySpawner : MonoBehaviour
         while (currentWave < totalWaves)
         {
             currentWave++;
+            if(waveText!= null)
+            {
+                waveText.text = "웨이브 "+currentWave + " / " + totalWaves;
+            }
+
             Debug.Log("웨이브 " + currentWave + " / " + totalWaves);
 
             for (int i = 0; i < enemiesPerWave; i++)

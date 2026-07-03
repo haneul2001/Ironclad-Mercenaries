@@ -7,6 +7,6 @@ public class MeleeAttack : UnitAttack
     protected override void PerformAttack(EnemyHealth target)
     {
         target.TakeDamage(attackDamage);
-        Debug.Log(gameObject.name + " (근접) → 즉시 타격!");
+        // Debug.Log(gameObject.name + " (근접) → 즉시 타격!");
     }
 }

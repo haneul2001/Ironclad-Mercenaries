@@ -22,6 +22,6 @@ public class RangedAttack : UnitAttack
             proj.Setup(target, attackDamage);
         }
 
-        Debug.Log(gameObject.name + " (원거리) → 화살 발사!");
+        // Debug.Log(gameObject.name + " (원거리) → 화살 발사!");
     }
 }
