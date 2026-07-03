@@ -47,7 +47,7 @@ public abstract class UnitAttack : MonoBehaviour
     // 자식이 반드시 구현해야 하는 "공격 방법"
     protected abstract void PerformAttack(EnemyHealth target);
 
-    void OnDrawGizmosSelected()
+      protected virtual void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, attackRange);
