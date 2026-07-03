@@ -19,7 +19,7 @@ public class CoreHealth : MonoBehaviour
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            Debug.Log("게임 오버!");
+            GameManager.Instance.OnCoreDestoryed();
         }
     }
 }

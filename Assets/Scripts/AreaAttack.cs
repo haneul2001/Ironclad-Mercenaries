@@ -29,7 +29,7 @@ public class AreaAttack : UnitAttack
             }
         }
 
-        Debug.Log(gameObject.name + " (마법사) → " + explosionCenter + " 지점에 광역기!");
+        // Debug.Log(gameObject.name + " (마법사) → " + explosionCenter + " 지점에 광역기!");
     }
 
     // 폭발 반경을 Scene 뷰에 표시 (개발용)

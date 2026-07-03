@@ -4,51 +4,68 @@ using System.Collections;
 public class EnemySpawner : MonoBehaviour
 {
     [Header("스폰 설정")]
-    public GameObject enemyPrefab;      // 생성할 적 프리팹
-    public int enemiesPerWave = 5;      // 웨이브당 적 수
-    public float spawnInterval = 1f;    // 적 하나씩 나오는 간격(초)
-    public float timeBetweenWaves = 3f; // 웨이브 사이 쉬는 시간(초)
+    public GameObject enemyPrefab;
+    public int enemiesPerWave = 5;
+    public float spawnInterval = 1f;
+    public float timeBetweenWaves = 3f;
 
     [Header("스폰 위치 범위")]
-    public float spawnWidth = 4f;       // 좌우로 퍼지는 범위
+    public float spawnWidth = 4f;
 
     private int currentWave = 0;
+    private bool allWavesSpawned = false;  // 모든 웨이브 스폰 완료 여부
 
     void Start()
     {
-        // 웨이브 반복을 시작
         StartCoroutine(SpawnWaves());
     }
 
     IEnumerator SpawnWaves()
     {
-        // 무한히 웨이브를 진행
-        while (true)
+        // GameManager의 목표 웨이브 수만큼 반복
+        int totalWaves = GameManager.Instance.targetWave;
+
+        while (currentWave < totalWaves)
         {
             currentWave++;
-            Debug.Log("웨이브 " + currentWave + " 시작!");
+            Debug.Log("웨이브 " + currentWave + " / " + totalWaves);
 
-            // 이번 웨이브의 적들을 순서대로 생성
             for (int i = 0; i < enemiesPerWave; i++)
             {
                 SpawnOneEnemy();
                 yield return new WaitForSeconds(spawnInterval);
             }
 
-            // 다음 웨이브까지 대기
             yield return new WaitForSeconds(timeBetweenWaves);
+        }
+
+        // 모든 웨이브 스폰 완료
+        allWavesSpawned = true;
+        Debug.Log("모든 웨이브 스폰 완료! 남은 적 처치 대기...");
+    }
+
+    void Update()
+    {
+        // 모든 웨이브를 스폰했고, 남은 적이 없으면 승리
+        if (allWavesSpawned && currentWave > 0)
+        {
+            // 씬에 남은 적이 있는지 확인
+            EnemyHealth[] remainingEnemies = FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None);
+            if (remainingEnemies.Length == 0)
+            {
+                GameManager.Instance.OnAllWavesCleared();
+                allWavesSpawned = false;  // 중복 호출 방지
+            }
         }
     }
 
     void SpawnOneEnemy()
     {
-        // 좌우로 랜덤한 위치 계산 (X축으로 퍼지게)
         float randomX = Random.Range(-spawnWidth, spawnWidth);
         Vector3 spawnPos = new Vector3(transform.position.x + randomX,
                                        transform.position.y,
                                        transform.position.z);
 
-        // 적 생성
-        Instantiate(enemyPrefab, spawnPos, enemyPrefab.transform.rotation); // 프리팹 y축 180도 회전
+        Instantiate(enemyPrefab, spawnPos, enemyPrefab.transform.rotation);
     }
 }
