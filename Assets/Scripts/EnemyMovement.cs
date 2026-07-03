@@ -15,13 +15,14 @@ public class EnemyMovement : MonoBehaviour
     {
         if (!isAttacking)
         {
-            transform.Translate(Vector3.back * moveSpeed * Time.deltaTime);
+             transform.position += Vector3.back * moveSpeed * Time.deltaTime;
         }
     }
 
     // 성벽에 닿으면 호출됨: 멈추고 공격 시작
     void OnTriggerEnter(Collider other)
     {
+         Debug.Log("뭔가 닿음: " + other.name);
         if (other.CompareTag("Core"))
         {
             CoreHealth core = other.GetComponent<CoreHealth>();

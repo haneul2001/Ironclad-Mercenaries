@@ -49,6 +49,6 @@ public class EnemySpawner : MonoBehaviour
                                        transform.position.z);
 
         // 적 생성
-        Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
+        Instantiate(enemyPrefab, spawnPos, enemyPrefab.transform.rotation); // 프리팹 y축 180도 회전
     }
 }
