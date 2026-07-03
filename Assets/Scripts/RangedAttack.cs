@@ -3,25 +3,53 @@ using UnityEngine;
 public class RangedAttack : UnitAttack
 {
     [Header("원거리 전용")]
-    public GameObject projectilePrefab;  // 발사할 화살 프리팹
-    public Transform firePoint;          // 화살이 나가는 위치(없으면 자기 위치)
+    public GameObject projectilePrefab;
+    public Transform firePoint;
 
-    // 부모의 빈칸을 채움: 원거리는 화살 발사
+    [Header("애니메이션")]
+    public float attackAnimLength = 1f;   // Attack01 원래 길이 (초)
+
+    private Animator anim;
+    private EnemyHealth currentTarget;
+
+    void Start()
+    {
+        anim = GetComponentInChildren<Animator>();
+
+        // 애니메이션 속도를 공격 주기(attackInterval)에 맞춤
+        if (anim != null && attackInterval > 0f)
+        {
+            anim.speed = attackAnimLength / attackInterval;
+        }
+    }
+
     protected override void PerformAttack(EnemyHealth target)
     {
-        // 발사 위치 결정
+        currentTarget = target;
+        if (anim != null)
+        {
+            anim.SetTrigger("Attack01");
+        }
+    }
+
+    public void FireArrow()
+    {
+        if (currentTarget == null) return;
+
         Vector3 spawnPos = firePoint != null ? firePoint.position : transform.position;
-
-        // 화살 생성
         GameObject arrow = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
-
-        // 화살에게 목표와 데미지를 알려줌
         Projectile proj = arrow.GetComponent<Projectile>();
         if (proj != null)
         {
-            proj.Setup(target, attackDamage);
+            proj.Setup(currentTarget, attackDamage);
         }
-
-        // Debug.Log(gameObject.name + " (원거리) → 화살 발사!");
     }
+    protected override void OnAttackStatsChanged()
+{
+    // 공속 바뀌면 애니메이션 속도도 다시 계산
+    if (anim != null && attackInterval > 0f)
+    {
+        anim.speed = attackAnimLength / attackInterval;
+    }
+}
 }

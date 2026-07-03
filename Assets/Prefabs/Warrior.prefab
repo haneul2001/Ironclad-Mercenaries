@@ -128,9 +128,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0467ebc3025c7604ebbaff6f01eadb31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeAttack
-  attackRange: 3
-  attackDamage: 30
+  attackRange: 4
+  attackDamage: 15
   attackInterval: 1
+  rangeX: 10
+  rangeZ: 4
+  slashEffect: {fileID: 3894563636541966133, guid: c27fac790990ed84f8ffc7736dd4b189, type: 3}
+  effectBaseScale: 1
+  attackAnimLength: 1
 --- !u!1001 &234249718803791767
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -179,6 +184,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1505256498287506956, guid: 57afc98a9486fd94db1965e854a296e9, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 16aad2fcb98be85449686cccd98e8aac, type: 2}
     - target: {fileID: 1739188933093294639, guid: 57afc98a9486fd94db1965e854a296e9, type: 3}
       propertyPath: m_Name
       value: MaskTint01

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 535737442465473820}
   m_Layer: 0
   m_Name: Magician
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -126,11 +126,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 069b0087bd2f7c8458ff44f88f012ef9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AreaAttack
-  attackRange: 7
-  attackDamage: 50
-  attackInterval: 2
-  explosionRadius: 1.5
-  explosionEffect: {fileID: 0}
+  attackRange: 10
+  attackDamage: 15
+  attackInterval: 1
+  explosionRadius: 1
+  explosionEffect: {fileID: 7554899051286264844, guid: a18cf00929b66db41bdab62419fdaa73, type: 3}
+  effectBaseRadius: 1
+  attackAnimLength: 1
 --- !u!1001 &8046456374846907313
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -183,6 +185,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 870191145766204325, guid: c56a12731e8250747a296b61a25e07ce, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: a06bb2836fd4afd42a5e5e6ae0eff5e3, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -26,7 +26,7 @@ public abstract class UnitAttack : MonoBehaviour
     }
 
     // 사거리 안 가장 가까운 적 찾기 (공통 로직)
-    protected EnemyHealth FindNearestEnemy()
+    protected virtual EnemyHealth FindNearestEnemy()
     {
         EnemyHealth[] enemies = FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None);
         EnemyHealth nearest = null;
@@ -52,4 +52,12 @@ public abstract class UnitAttack : MonoBehaviour
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
+    // 공격 주기를 바꾸고, 관련 처리(애니메이션 속도 등)를 갱신
+    public virtual void SetAttackInterval(float newInterval)
+    {
+        attackInterval = newInterval;
+        // 애니메이션 속도 갱신은 자식이 override해서 처리
+        OnAttackStatsChanged();
+    }
+    protected virtual void OnAttackStatsChanged() { }
 }

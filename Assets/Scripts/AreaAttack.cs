@@ -3,40 +3,64 @@ using UnityEngine;
 public class AreaAttack : UnitAttack
 {
     [Header("광역 전용")]
-    public float explosionRadius = 1.5f;   // 폭발 반경 (설정 가능)
-    public GameObject explosionEffect;     // 폭발 이펙트(선택, 없으면 비워둠)
+    public float explosionRadius = 1.5f;
+    public GameObject explosionEffect;
+    public float effectBaseRadius = 1f; // 이펙트 원본 Scale이 1f일 때 반경
 
-    // 부모가 찾아준 target(가장 가까운 적) 위치에 광역기를 터뜨림
-    protected override void PerformAttack(EnemyHealth target)
+    [Header("애니메이션")]
+    public float attackAnimLength = 1f;   // Attack01 원래 길이
+
+    private Animator anim;
+
+    void Start()
     {
-        // 타겟의 위치 = 광역기가 터지는 중심점
-        Vector3 explosionCenter = target.transform.position;
+        anim = GetComponentInChildren<Animator>();
 
-        // (선택) 폭발 이펙트를 그 위치에 생성
-        if (explosionEffect != null)
+        // 애니메이션 속도를 공격 주기에 맞춤 (궁수랑 동일)
+        if (anim != null && attackInterval > 0f)
         {
-            Instantiate(explosionEffect, explosionCenter, Quaternion.identity);
+            anim.speed = attackAnimLength / attackInterval;
         }
-
-        // 폭발 중심 반경 안의 모든 적에게 데미지
-        EnemyHealth[] enemies = FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None);
-        foreach (EnemyHealth enemy in enemies)
+    }
+    protected override void PerformAttack(EnemyHealth target)
         {
-            float distance = Vector3.Distance(explosionCenter, enemy.transform.position);
-            if (distance <= explosionRadius)
+            // 공격 애니메이션 재생
+            if (anim != null)
             {
-                enemy.TakeDamage(attackDamage);
+                anim.SetTrigger("Attack01");
+            }
+
+            // 폭발 중심 = 타겟 위치
+            Vector3 explosionCenter = target.transform.position;
+
+            // 폭발 이펙트 생성 (한 번만!)
+            if (explosionEffect != null)
+            {
+                GameObject fx = Instantiate(explosionEffect, explosionCenter, Quaternion.identity);
+
+                // 이펙트 크기를 폭발 반경에 맞춤
+                float scaleFactor = explosionRadius / effectBaseRadius;
+                fx.transform.localScale = Vector3.one * scaleFactor;
+
+                Destroy(fx, 2f);   // 2초 후 제거
+            }
+
+            // 반경 안 적에게 데미지
+            EnemyHealth[] enemies = FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None);
+            foreach (EnemyHealth enemy in enemies)
+            {
+                float distance = Vector3.Distance(explosionCenter, enemy.transform.position);
+                if (distance <= explosionRadius)
+                {
+                    enemy.TakeDamage(attackDamage);
+                }
             }
         }
+        
 
-        // Debug.Log(gameObject.name + " (마법사) → " + explosionCenter + " 지점에 광역기!");
-    }
-
-    // 폭발 반경을 Scene 뷰에 표시 (개발용)
     protected override void OnDrawGizmosSelected()
     {
-        base.OnDrawGizmosSelected();  // ← 부모 기즈모(사거리 청록 원)를 먼저 그림
-        // 그 위에 폭발 반경을 빨강으로 덧그림
+        base.OnDrawGizmosSelected();
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, explosionRadius);
     }
