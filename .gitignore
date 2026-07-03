@@ -75,4 +75,6 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 # 유료 에셋 (라이선스상 저장소 제외)
 /[Aa]ssets/Lana Studio/
+/[Aa]ssets/Lana Studio.meta
 /[Aa]ssets/RPGTinyHeroWorldBundlePolyart/
+/[Aa]ssets/RPGTinyHeroWorldBundlePolyart.meta
