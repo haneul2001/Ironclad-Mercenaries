@@ -1156,8 +1156,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   targetWave: 5
-  victoryPanel: {fileID: 0}
-  defeatPanel: {fileID: 0}
+  victoryPanel: {fileID: 376044820}
+  defeatPanel: {fileID: 1966203281}
   currentState: 0
 --- !u!4 &767344858
 Transform:
@@ -1317,7 +1317,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 890855310}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 767344859}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: RestartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &890855310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1580,7 +1592,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1184625073}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 767344859}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: RestartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1184625073
 MonoBehaviour:
   m_ObjectHideFlags: 0
