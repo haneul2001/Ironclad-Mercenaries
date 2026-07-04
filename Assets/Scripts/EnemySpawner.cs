@@ -9,15 +9,17 @@ public class EnemySpawner : MonoBehaviour
 
     [Header("스폰 설정")]
     public GameObject enemyPrefab;
-    public int enemiesPerWave = 5; // 한 웨이브당 스폰할 적 수
-    public float spawnInterval = 1f;
-    public float timeBetweenWaves = 3f;
+    public int enemiesPerWave = 5;      // 한 웨이브당 스폰할 적 수
+
+    [Header("웨이브 타이밍")]
+    public float waveDuration = 10f;    // 한 웨이브 총 시간
+    public float spawnDuration = 6f;    // 이 시간 안에 몬스터 다 스폰
 
     [Header("스폰 위치 범위")]
     public float spawnWidth = 4f;
 
     private int currentWave = 0;
-    private bool allWavesSpawned = false;  // 모든 웨이브 스폰 완료 여부
+    private bool allWavesSpawned = false;
 
     void Start()
     {
@@ -26,18 +28,18 @@ public class EnemySpawner : MonoBehaviour
 
     IEnumerator SpawnWaves()
     {
-        // GameManager의 목표 웨이브 수만큼 반복
         int totalWaves = GameManager.Instance.targetWave;
 
         while (currentWave < totalWaves)
         {
             currentWave++;
-            if(waveText!= null)
-            {
-                waveText.text = "웨이브 "+currentWave + " / " + totalWaves;
-            }
+            if (waveText != null)
+                waveText.text = "웨이브 " + currentWave + " / " + totalWaves;
 
             Debug.Log("웨이브 " + currentWave + " / " + totalWaves);
+
+            // 스폰 간격 = 스폰 시간 / 몬스터 수 (6초 안에 균등 분배)
+            float spawnInterval = (enemiesPerWave > 0) ? spawnDuration / enemiesPerWave : 0f;
 
             for (int i = 0; i < enemiesPerWave; i++)
             {
@@ -45,25 +47,28 @@ public class EnemySpawner : MonoBehaviour
                 yield return new WaitForSeconds(spawnInterval);
             }
 
-            yield return new WaitForSeconds(timeBetweenWaves);
+            // 마지막 웨이브가 아니면, 웨이브 총 시간(10초)에서 스폰 시간(6초) 뺀 만큼 대기
+            if (currentWave < totalWaves)
+            {
+                float remainingTime = waveDuration - spawnDuration;   // 10 - 6 = 4초
+                if (remainingTime > 0f)
+                    yield return new WaitForSeconds(remainingTime);
+            }
         }
 
-        // 모든 웨이브 스폰 완료
         allWavesSpawned = true;
         Debug.Log("모든 웨이브 스폰 완료! 남은 적 처치 대기...");
     }
 
     void Update()
     {
-        // 모든 웨이브를 스폰했고, 남은 적이 없으면 승리
         if (allWavesSpawned && currentWave > 0)
         {
-            // 씬에 남은 적이 있는지 확인
             EnemyHealth[] remainingEnemies = FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None);
             if (remainingEnemies.Length == 0)
             {
                 GameManager.Instance.OnAllWavesCleared();
-                allWavesSpawned = false;  // 중복 호출 방지
+                allWavesSpawned = false;
             }
         }
     }

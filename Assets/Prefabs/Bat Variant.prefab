@@ -261,7 +261,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da2f1cbff9e7e7b4b945ef4c3c2c4387, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 150
+  maxHealth: 20
   damageTextPrefab: {fileID: 4267916196052755174, guid: 92a8b06d3b52767409f87a0f7e0d2362, type: 3}
   textOffset: {x: 0, y: 2, z: 0}
 --- !u!114 &3820249926751073753
@@ -276,7 +276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62a4ee6f11099c747ab05b479a0961aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
-  moveSpeed: 0.7
+  moveSpeed: 2
   attackDamage: 10
   attackInterval: 1
 --- !u!136 &6977574507561528395
