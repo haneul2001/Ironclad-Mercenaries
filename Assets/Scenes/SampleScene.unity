@@ -2656,7 +2656,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3582320991998711069, guid: f1e90d7082964f348aef513af7a6479e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3765698902048493598, guid: f1e90d7082964f348aef513af7a6479e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2739,28 +2739,32 @@ PrefabInstance:
       value: Attack03_Archer
       objectReference: {fileID: 0}
     - target: {fileID: 8599748539202169501, guid: f1e90d7082964f348aef513af7a6479e, type: 3}
+      propertyPath: attackRange
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 8599748539202169501, guid: f1e90d7082964f348aef513af7a6479e, type: 3}
       propertyPath: attackDamage
       value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8599748539202169501, guid: f1e90d7082964f348aef513af7a6479e, type: 3}
       propertyPath: skill02Chance
-      value: 0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 8599748539202169501, guid: f1e90d7082964f348aef513af7a6479e, type: 3}
-      propertyPath: skill03Chance
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8599748539202169501, guid: f1e90d7082964f348aef513af7a6479e, type: 3}
-      propertyPath: attackInterval
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8599748539202169501, guid: f1e90d7082964f348aef513af7a6479e, type: 3}
+      propertyPath: skill03Chance
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8599748539202169501, guid: f1e90d7082964f348aef513af7a6479e, type: 3}
+      propertyPath: attackInterval
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8599748539202169501, guid: f1e90d7082964f348aef513af7a6479e, type: 3}
       propertyPath: skill02Unlocked
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8599748539202169501, guid: f1e90d7082964f348aef513af7a6479e, type: 3}
       propertyPath: skill03Unlocked
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8721210529679498234, guid: f1e90d7082964f348aef513af7a6479e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2804,12 +2808,16 @@ PrefabInstance:
       value: 16.776896
       objectReference: {fileID: 0}
     - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
+      propertyPath: damage01
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
       propertyPath: damage02
-      value: 500
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
       propertyPath: damage03
-      value: 1000
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
       propertyPath: radius02
@@ -2837,19 +2845,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
       propertyPath: attackDamage
-      value: 15
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
       propertyPath: skill02Chance
-      value: 0.5
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
       propertyPath: skill03Chance
-      value: 1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
       propertyPath: attackInterval
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
       propertyPath: explosionEffect
@@ -2861,11 +2869,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
       propertyPath: skill02Unlocked
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
       propertyPath: skill03Unlocked
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
       propertyPath: explosionEffect02
@@ -3125,11 +3133,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3455147042272915939, guid: fe6ba99c92391e84dbe292aad42e65ed, type: 3}
       propertyPath: damage02
-      value: 20
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 3455147042272915939, guid: fe6ba99c92391e84dbe292aad42e65ed, type: 3}
       propertyPath: damage03
-      value: 30
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 3455147042272915939, guid: fe6ba99c92391e84dbe292aad42e65ed, type: 3}
       propertyPath: clip02Name
@@ -3141,7 +3149,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3455147042272915939, guid: fe6ba99c92391e84dbe292aad42e65ed, type: 3}
       propertyPath: attackDamage
-      value: 30
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 3455147042272915939, guid: fe6ba99c92391e84dbe292aad42e65ed, type: 3}
       propertyPath: skill02Chance
@@ -3157,7 +3165,7 @@ PrefabInstance:
       objectReference: {fileID: 5989611964172460420, guid: a2ff7d77092c0f44da8db4303849a865, type: 3}
     - target: {fileID: 3455147042272915939, guid: fe6ba99c92391e84dbe292aad42e65ed, type: 3}
       propertyPath: attackInterval
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3455147042272915939, guid: fe6ba99c92391e84dbe292aad42e65ed, type: 3}
       propertyPath: skill02Unlocked
@@ -3197,7 +3205,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7346535840741106824, guid: fe6ba99c92391e84dbe292aad42e65ed, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8422669071822918960, guid: fe6ba99c92391e84dbe292aad42e65ed, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
