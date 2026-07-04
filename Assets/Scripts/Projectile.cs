@@ -3,45 +3,51 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     public float speed = 10f;
+    public float lifeTime = 2f;   // 이 시간 지나면 자동 소멸
 
     [Header("회전 보정")]
-    public Vector3 rotationOffset = Vector3.zero;   // 화살 모델 방향 보정 (필요시)
+    public Vector3 rotationOffset = Vector3.zero;
 
-    private EnemyHealth target;
+    private Vector3 direction;   // 날아갈 방향 (발사 시 고정)
     private int damage;
 
-    public void Setup(EnemyHealth newTarget, int newDamage)
+    // 발사: 방향과 데미지를 받음
+    public void Setup(Vector3 fireDirection, int newDamage)
     {
-        target = newTarget;
+        direction = fireDirection.normalized;
         damage = newDamage;
-    }
 
-    void Update()
-    {
-        if (target == null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        // 목표 방향 계산
-        Vector3 direction = (target.transform.position - transform.position).normalized;
-
-        // ★ 화살이 목표 방향을 바라보게 회전
+        // 발사 방향을 바라보게 회전
         if (direction != Vector3.zero)
         {
             transform.rotation = Quaternion.LookRotation(direction) * Quaternion.Euler(rotationOffset);
         }
 
-        // 목표를 향해 이동
-        transform.position += direction * speed * Time.deltaTime;
+        // 수명 후 자동 소멸
+        Destroy(gameObject, lifeTime);
+    }
 
-        // 명중 처리
-        float distance = Vector3.Distance(transform.position, target.transform.position);
-        if (distance < 0.3f)
+    void Update()
+    {
+        // 방향으로 직진
+        transform.position += direction * speed * Time.deltaTime;
+    }
+
+    // 적과 충돌 시 데미지
+   void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("화살이 닿음: " + other.name);   // ← 뭐에 닿는지
+
+        EnemyHealth enemy = other.GetComponentInParent<EnemyHealth>();
+        if (enemy != null)
         {
-            target.TakeDamage(damage);
+            Debug.Log("적 발견! 데미지: " + enemy.name);   // ← 적 찾았는지
+            enemy.TakeDamage(damage);
             Destroy(gameObject);
+        }
+        else
+        {
+            Debug.Log("EnemyHealth 못 찾음: " + other.name);   // ← 못 찾음
         }
     }
 }

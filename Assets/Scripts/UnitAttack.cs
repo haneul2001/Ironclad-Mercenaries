@@ -10,6 +10,13 @@ public abstract class UnitAttack : MonoBehaviour
 
     private float attackTimer = 0f;
 
+
+    [Header("빌드 스킬 (해금/확률)")]
+    public bool skill02Unlocked = false;   // 2단계 스킬 해금 여부
+    public bool skill03Unlocked = false;   // 3단계 스킬 해금 여부
+    public float skill02Chance = 0.3f;     // 2단계 발동 확률 (30%)
+    public float skill03Chance = 0.1f;     // 3단계 발동 확률 (10%)
+
     void Update()
     {
         attackTimer += Time.deltaTime;
@@ -19,7 +26,7 @@ public abstract class UnitAttack : MonoBehaviour
             EnemyHealth target = FindNearestEnemy();
             if (target != null)
             {
-                PerformAttack(target);  // ← 실제 공격은 자식이 정의
+                PerformAttack(target);
                 attackTimer = 0f;
             }
         }
@@ -47,17 +54,28 @@ public abstract class UnitAttack : MonoBehaviour
     // 자식이 반드시 구현해야 하는 "공격 방법"
     protected abstract void PerformAttack(EnemyHealth target);
 
-      protected virtual void OnDrawGizmosSelected()
+    protected virtual void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
+
     // 공격 주기를 바꾸고, 관련 처리(애니메이션 속도 등)를 갱신
     public virtual void SetAttackInterval(float newInterval)
     {
         attackInterval = newInterval;
-        // 애니메이션 속도 갱신은 자식이 override해서 처리
         OnAttackStatsChanged();
     }
+
     protected virtual void OnAttackStatsChanged() { }
+
+    // 확률로 공격 단계 결정 (강한 스킬부터 독립 체크)
+    protected int RollAttackLevel()
+    {
+        if (skill03Unlocked && Random.value < skill03Chance)
+            return 3;
+        if (skill02Unlocked && Random.value < skill02Chance)
+            return 2;
+        return 1;
+    }
 }
