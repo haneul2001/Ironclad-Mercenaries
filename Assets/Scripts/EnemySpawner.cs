@@ -9,7 +9,7 @@ public class EnemySpawner : MonoBehaviour
 
     [Header("스폰 설정")]
     public GameObject enemyPrefab;
-    public int enemiesPerWave = 5;
+    public int enemiesPerWave = 5; // 한 웨이브당 스폰할 적 수
     public float spawnInterval = 1f;
     public float timeBetweenWaves = 3f;
 

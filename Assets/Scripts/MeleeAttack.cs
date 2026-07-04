@@ -153,32 +153,32 @@ public class MeleeAttack : UnitAttack
     }
 
     // 스킬3: 검기 발사 (애니메이션 이벤트로 타이밍 지정)
-    public void FireSlash()
+   public void FireSlash()
+{
+    EnemyHealth target = FindNearestEnemy();
+    Vector3 spawnPos = firePoint != null ? firePoint.position : transform.position;
+
+    Vector3 dir;
+    if (target != null)
     {
-        EnemyHealth target = FindNearestEnemy();
-        Vector3 spawnPos = firePoint != null ? firePoint.position : transform.position;
-
-        Vector3 dir;
-        if (target != null)
-        {
-            dir = target.transform.position - spawnPos;
-            dir.y = 0;
-            dir = dir.normalized;
-        }
-        else
-        {
-            dir = transform.forward;
-            dir.y = 0;
-            dir = dir.normalized;
-        }
-
-        if (slashProjectilePrefab != null)
-        {
-            GameObject slash = Instantiate(slashProjectilePrefab, spawnPos, Quaternion.identity);
-            Projectile proj = slash.GetComponent<Projectile>();
-            if (proj != null) proj.Setup(dir, damage03);
-        }
+        dir = target.transform.position - spawnPos;
+        dir.y = 0;
+        dir = dir.normalized;
     }
+    else
+    {
+        dir = transform.forward;   // 적 없으면 정면
+        dir.y = 0;
+        dir = dir.normalized;
+    }
+
+    if (slashProjectilePrefab != null)
+    {
+        GameObject slash = Instantiate(slashProjectilePrefab, spawnPos, Quaternion.identity);
+        Projectile proj = slash.GetComponent<Projectile>();
+        if (proj != null) proj.Setup(dir, damage03);
+    }
+}
 
     protected override void OnDrawGizmosSelected()
     {
