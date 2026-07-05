@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     [Header("UI 패널")]
     public GameObject victoryPanel;
     public GameObject defeatPanel;
+    public UpgradeMenuController upgradeMenu;   // 인스펙터에서 드래그
 
     [Header("정비 UI")]
     public GameObject upgradePanel;
@@ -135,31 +136,36 @@ public class GameManager : MonoBehaviour
         Debug.Log("정비 UI 내려옴");
     }
     // "다음 날로" 버튼이 호출
+     // "다음 날로" 버튼이 호출
     public void OnNextDayClicked()
     {
         // 1) AI 자동 강화 (주인공 제외 나머지)
         if (UpgradeManager.Instance != null)
             UpgradeManager.Instance.RunAIUpgrades();
 
-        // 2) 정비 UI 닫기
+        // 2) 정비소 패널들 리셋 (열려있던 강화창 정리)
+        if (upgradeMenu != null)
+            upgradeMenu.ResetPanels();
+
+        // 3) 정비 UI 닫기
         if (upgradePanel != null)
             upgradePanel.SetActive(false);
 
-        // 3) 클릭 안내 텍스트도 혹시 켜져있으면 끄기
         if (clickToContinueText != null)
             clickToContinueText.SetActive(false);
 
         // 4) 다음 날로
         currentDay++;
-        currentState = GameState.Playing;   // 다시 플레이 상태로 (중요)
-        Time.timeScale = 1f;                // 혹시 멈춰있으면 재개
+        currentState = GameState.Playing;
+        Time.timeScale = 1f;
 
-        // 5) 스포너에 새 날 시작 지시
+        // 5) 스포너에 새 날 시작
         if (spawner != null)
             spawner.StartDay(currentDay);
 
         Debug.Log($"=== Day {currentDay} 시작 ===");
     }
+    
     void EndGame()
     {
         Time.timeScale = 0f;

@@ -35,6 +35,8 @@ public class UpgradeMenuController : MonoBehaviour
         if (choices == null || choices.Count == 0)
         {
             Debug.Log("특성 진입 실패 (골드 부족 등)");
+
+            
             return;
         }
 
@@ -94,5 +96,16 @@ public class UpgradeMenuController : MonoBehaviour
             selectMenu.gameObject.SetActive(true);
             selectMenu.SlideDown();
         }
+    }
+     // 정비소 닫을 때(다음날로) 모든 하위 패널을 강제로 숨김 상태로 리셋
+    public void ResetPanels()
+    {
+        StopAllCoroutines();   // 진행 중인 전환 코루틴 정리
+
+        if (traitPanel != null)  traitPanel.gameObject.SetActive(false);
+        if (statPanel != null)   statPanel.gameObject.SetActive(false);
+        if (gamblePanel != null) gamblePanel.gameObject.SetActive(false);
+
+        currentPanel = null;
     }
 }
