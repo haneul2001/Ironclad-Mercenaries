@@ -119,6 +119,10 @@ public class GameManager : MonoBehaviour
             foreach(SlideInPanel s in slides) s.SlideDown();
         }
 
+        // 정비소 진입 → 각 유닛에 예산 지급
+        if (UpgradeManager.Instance != null)
+            UpgradeManager.Instance.GrantBudgets(); // 예산 지급 
+
         Debug.Log("정비 UI 내려옴");
     }
 

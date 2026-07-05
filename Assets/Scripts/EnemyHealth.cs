@@ -9,18 +9,33 @@ public class EnemyHealth : MonoBehaviour
     public GameObject damageTextPrefab;                  // 데미지 텍스트 프리팹
     public Vector3 textOffset = new Vector3(0, 2f, 0);   // 몬스터 위로 살짝
 
+    // ── 취약 디버프 ──
+    // 받는 데미지 배율. 1.0 = 100%(기본), 1.1 = 110%(취약 10%)
+    private float damageTakenMultiplier = 1f;
+
     void Start()
     {
         currentHealth = maxHealth;
     }
 
+    // 취약 디버프 설정 (한 번만 걸림, 더 높은 값이 오면 갱신)
+    public void AddVulnerable(float percent)
+    {
+        float newMultiplier = 1f + percent;
+        if (newMultiplier > damageTakenMultiplier)
+            damageTakenMultiplier = newMultiplier;
+    }
+
     // 외부(유닛)에서 호출해 데미지를 입힘
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
+        // 취약 배율 적용
+        int finalDamage = Mathf.RoundToInt(damage * damageTakenMultiplier);
 
-        // 데미지 텍스트 표시
-        ShowDamageText(damage);
+        currentHealth -= finalDamage;
+
+        // 데미지 텍스트 표시 (실제 들어간 데미지로)
+        ShowDamageText(finalDamage);
 
         if (currentHealth <= 0)
         {

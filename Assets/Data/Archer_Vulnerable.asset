@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce5d88fff2d2c1d4f8b60e9529616e51, type: 3}
+  m_Name: Archer_Vulnerable
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
+  type: 8
+  category: 0
+  displayName: "\uC801\uC911 \uC2DC \uBAAC\uC2A4\uD130\uC758 \uBC1B\uB294 \uB370\uBBF8\uC9C0
+    2% \uC99D\uAC00"
+  description: 
+  icon: {fileID: 0}
+  valuePerLevel: 0.02
+  maxLevel: 5
+  baseCost: 20
+  costPerLevel: 0

@@ -379,6 +379,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &183757678 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3455147042272915939, guid: fe6ba99c92391e84dbe292aad42e65ed, type: 3}
+  m_PrefabInstance: {fileID: 4495913662538373328}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 183757671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0467ebc3025c7604ebbaff6f01eadb31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MeleeAttack
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -1410,6 +1421,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7636490376530233525, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
   m_PrefabInstance: {fileID: 2338031070943568927}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &789965185 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
+  m_PrefabInstance: {fileID: 2338031070943568927}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 069b0087bd2f7c8458ff44f88f012ef9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AreaAttack
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -2186,6 +2208,72 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1184625070}
   m_CullTransparentMesh: 1
+--- !u!1 &1204433484
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1204433486}
+  - component: {fileID: 1204433485}
+  m_Layer: 0
+  m_Name: UpgradeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1204433485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1204433484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3212dabe25933b449d2d31ae334d266, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
+  archer: {fileID: 1276904354}
+  warrior: {fileID: 183757678}
+  mage: {fileID: 789965185}
+  hero: {fileID: 1276904354}
+  budgetPerUnit: 20
+  traitEntryCost: 20
+  commonTraits:
+  - {fileID: 11400000, guid: 870ffbc40f7baba4d8a5afee5ebadb05, type: 2}
+  - {fileID: 11400000, guid: f8b21ae62c4e4074c8bf07fddbbf97cf, type: 2}
+  - {fileID: 11400000, guid: 77b49df463c3f5b45bf573419355e2dc, type: 2}
+  - {fileID: 11400000, guid: 41968f495368fcc4eb2383edb9b50285, type: 2}
+  - {fileID: 11400000, guid: c09e5fe55ab6eb24dadcdcbdd4bb7b23, type: 2}
+  - {fileID: 11400000, guid: e977074bec27d834f99652bc1be388a1, type: 2}
+  archerTraits:
+  - {fileID: 11400000, guid: 9c4b9b22d16688d4dabe8224e7d5c14c, type: 2}
+  - {fileID: 11400000, guid: ef8483740f538b6479ab50561c7dc65b, type: 2}
+  - {fileID: 11400000, guid: 72ea3478b3616294da5171570f0cba17, type: 2}
+  - {fileID: 11400000, guid: 870ffbc40f7baba4d8a5afee5ebadb05, type: 2}
+  - {fileID: 11400000, guid: f8b21ae62c4e4074c8bf07fddbbf97cf, type: 2}
+  baseStats:
+  - {fileID: 11400000, guid: 9f8d92a55cec7a740b48333013afc096, type: 2}
+  - {fileID: 11400000, guid: 7f0a239bb8e2e4d41b1275ed9fb0f361, type: 2}
+--- !u!4 &1204433486
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1204433484}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 524.6622, y: -0.00002, z: 492.82092}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1243467314 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8032207995661165623, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
@@ -2203,6 +2291,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6177161c0387a44ebfd931242fdf339, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AreaAnimationRelay
+--- !u!114 &1276904354 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8599748539202169501, guid: f1e90d7082964f348aef513af7a6479e, type: 3}
+  m_PrefabInstance: {fileID: 2098615378058659168}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23328e1e02ac833418b5c361504d7709, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RangedAttack
 --- !u!1 &1358907237
 GameObject:
   m_ObjectHideFlags: 0
@@ -3405,11 +3504,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
       propertyPath: radius02
-      value: 4
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
       propertyPath: radius03
-      value: 10
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
       propertyPath: clip01Name
@@ -3429,7 +3528,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
       propertyPath: attackDamage
-      value: 150
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
       propertyPath: skill02Chance
@@ -3437,11 +3536,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
       propertyPath: skill03Chance
-      value: 1
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
       propertyPath: attackInterval
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 535737442465473820, guid: 8942840f6d413314dbce4e726a0a4a46, type: 3}
       propertyPath: explosionEffect
@@ -3944,3 +4043,4 @@ SceneRoots:
   - {fileID: 767344858}
   - {fileID: 471030524}
   - {fileID: 720735549}
+  - {fileID: 1204433486}

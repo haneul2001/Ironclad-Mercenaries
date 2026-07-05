@@ -15,6 +15,9 @@ public class RangedAttack : UnitAttack
     private Animator anim;
     private EnemyHealth currentTarget;
     private Dictionary<string, float> clipLengths = new Dictionary<string, float>();
+        // ── 궁수 디버프 값 (강화로 쌓임, 화살에 실려 나감) ──
+    private float arrowVulnerable = 0f;   // 취약 부여량
+    private float arrowSlow = 0f;         // 둔화 부여량
 
    void Start()
 {
@@ -75,8 +78,23 @@ public class RangedAttack : UnitAttack
 
         GameObject arrow = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
         Projectile proj = arrow.GetComponent<Projectile>();
-        if (proj != null) proj.Setup(dir, attackDamage);
+         if (proj != null) proj.Setup(dir, attackDamage, arrowVulnerable, arrowSlow);
     }
 
     protected override void OnAttackStatsChanged() { }
+
+    protected override bool ApplyJobSpecificUpgrade(UpgradeType type, float value)
+    {
+        switch (type)
+        {
+            case UpgradeType.ArrowVulnerable:
+                arrowVulnerable += value;   // 예: 0.02 씩 (레벨별 값과 일치)
+                return true;
+            case UpgradeType.ArrowSlow:
+                arrowSlow += value;
+                return true;
+            default:
+                return false;   // 궁수는 스킬데미지·범위 강화 없음
+        }
+    }
 }

@@ -8,10 +8,10 @@ public class AreaAttack : UnitAttack
     public float radius02 = 2.5f;   // 스킬2 큰 장판
     public float radius03 = 3.5f;   // 스킬3 광역기
 
-    [Header("스킬별 데미지")]
-    public int damage01 = 10;
-    public int damage02 = 18;
-    public int damage03 = 25;
+    [Header("스킬별 데미지 배수 (attackDamage 기준)")]
+    public float skill1Mult = 1.0f;   // 어택1 = attackDamage × 1.0
+    public float skill2Mult = 1.8f;   // 어택2 = attackDamage × 1.8
+    public float skill3Mult = 2.5f;   // 어택3 = attackDamage × 2.5
 
     [Header("이펙트")]
     public GameObject explosionEffect;    // 스킬1
@@ -42,6 +42,12 @@ public class AreaAttack : UnitAttack
                 clipLengths[clip.name] = clip.length;
             }
         }
+    }
+
+    // 스킬 단계별 실제 데미지 = 기준 공격력 × 배수
+    private int GetSkillDamage(float mult)
+    {
+        return Mathf.RoundToInt(attackDamage * mult);
     }
 
     protected override void PerformAttack(EnemyHealth target)
@@ -95,9 +101,9 @@ public class AreaAttack : UnitAttack
         GameObject effect;
         switch (currentLevel)
         {
-            case 3: radius = radius03; damage = damage03; effect = explosionEffect03; break;
-            case 2: radius = radius02; damage = damage02; effect = explosionEffect02; break;
-            default: radius = radius01; damage = damage01; effect = explosionEffect; break;
+            case 3: radius = radius03; damage = GetSkillDamage(skill3Mult); effect = explosionEffect03; break;
+            case 2: radius = radius02; damage = GetSkillDamage(skill2Mult); effect = explosionEffect02; break;
+            default: radius = radius01; damage = GetSkillDamage(skill1Mult); effect = explosionEffect; break;
         }
 
         // 타겟 죽었으면 재탐색
@@ -134,6 +140,29 @@ public class AreaAttack : UnitAttack
     public void Explode()
     {
         DoExplosion();
+    }
+
+    // 마법사 전용 강화 처리 (스킬 데미지 배수 / 범위)
+    protected override bool ApplyJobSpecificUpgrade(UpgradeType type, float value)
+    {
+        switch (type)
+        {
+            case UpgradeType.Skill2Damage:
+                skill2Mult += value;   // 배수를 올림 (예: 1.8 → 2.0)
+                return true;
+            case UpgradeType.Skill3Damage:
+                skill3Mult += value;   // 예: 2.5 → 2.7
+                return true;
+            case UpgradeType.Skill1Range:
+            case UpgradeType.Skill2Range:
+                // 어택1·어택2 범위 강화 모두 전체 반경을 키움 (전사와 동일 방침)
+                radius01 *= (1f + value);   // 예: 0.1 = +10%
+                radius02 *= (1f + value);
+                radius03 *= (1f + value);
+                return true;
+            default:
+                return false;
+        }
     }
 
     protected override void OnDrawGizmosSelected()
