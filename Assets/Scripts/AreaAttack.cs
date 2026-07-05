@@ -171,4 +171,14 @@ public class AreaAttack : UnitAttack
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, radius01);
     }
+    // 마법사: attackDamage × 배수
+    public override int GetDisplayDamage(int skillLevel)
+    {
+        switch (skillLevel)
+        {
+            case 3: return GetSkillDamage(skill3Mult);
+            case 2: return GetSkillDamage(skill2Mult);
+            default: return GetSkillDamage(skill1Mult);
+        }
+    }
 }

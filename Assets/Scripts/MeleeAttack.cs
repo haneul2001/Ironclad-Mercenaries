@@ -213,4 +213,14 @@ public class MeleeAttack : UnitAttack
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireCube(transform.position, new Vector3(rangeX, 1f, rangeZ));
     }
+    // 전사: attackDamage × 배수 (스킬2는 2연타라 ×2)
+    public override int GetDisplayDamage(int skillLevel)
+    {
+        switch (skillLevel)
+        {
+            case 3: return GetSkillDamage(skill3Mult);
+            case 2: return GetSkillDamage(skill2Mult) * 2;
+            default: return GetSkillDamage(skill1Mult);
+        }
+    }
 }

@@ -15,7 +15,7 @@ MonoBehaviour:
   type: 2
   category: 0
   displayName: "\uAE30\uBCF8 \uACF5\uACA9\uB825 \uC99D\uAC00 (2%)"
-  description: 
+  description: "\uAE30\uBCF8 \uACF5\uACA9\uB825 \uC99D\uAC00 (2%)"
   icon: {fileID: 0}
   valuePerLevel: 0.2
   maxLevel: 5

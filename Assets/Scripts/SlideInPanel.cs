@@ -3,7 +3,7 @@ using System.Collections;
 
 public class SlideInPanel : MonoBehaviour
 {
-    public float slideDuration = 0.5f;
+    public float slideDuration = 1f;
     public float startY = 800f;    // 화면 위 (안 보임)
     public float endY = 0f;        // 제자리 (중앙)
 

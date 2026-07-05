@@ -174,7 +174,11 @@ public abstract class UnitAttack : MonoBehaviour
     {
         attackDamage = Mathf.RoundToInt(attackDamage * (1f + percent));
     }
-
+    // UI 표시용: 스킬 단계별 실질 데미지 (직업마다 계산법 다름)
+    public virtual int GetDisplayDamage(int skillLevel)
+    {
+        return attackDamage;   // 기본 구현: 자식이 override
+    }
     // 직업별로 다른 강화(스킬 데미지/범위/디버프)를 자식이 처리.
     // 처리했으면 true, 해당 없으면 false 반환.
     protected virtual bool ApplyJobSpecificUpgrade(UpgradeType type, float value)

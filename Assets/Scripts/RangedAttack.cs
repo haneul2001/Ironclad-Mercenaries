@@ -97,4 +97,10 @@ public class RangedAttack : UnitAttack
                 return false;   // 궁수는 스킬데미지·범위 강화 없음
         }
     }
+     // 궁수: 스킬1=1발, 스킬2=3발, 스킬3=5발
+    public override int GetDisplayDamage(int skillLevel)
+    {
+        int arrows = (skillLevel == 3) ? 5 : (skillLevel == 2) ? 3 : 1;
+        return attackDamage * arrows;
+    }
 }

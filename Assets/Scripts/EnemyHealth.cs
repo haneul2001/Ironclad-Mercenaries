@@ -13,11 +13,19 @@ public class EnemyHealth : MonoBehaviour
     // 받는 데미지 배율. 1.0 = 100%(기본), 1.1 = 110%(취약 10%)
     private float damageTakenMultiplier = 1f;
 
-    void Start()
+     void Start()
     {
-        currentHealth = maxHealth;
+        // SetMaxHealth로 미리 설정되지 않았으면 프리팹 기본값으로 초기화
+        if (currentHealth <= 0)
+            currentHealth = maxHealth;
     }
 
+     // 스폰 시 외부(스포너)에서 이 적의 최대 체력을 설정 (Day 난이도용)
+    public void SetMaxHealth(int newMax)
+    {
+        maxHealth = newMax;
+        currentHealth = newMax;
+    }
     // 취약 디버프 설정 (한 번만 걸림, 더 높은 값이 오면 갱신)
     public void AddVulnerable(float percent)
     {

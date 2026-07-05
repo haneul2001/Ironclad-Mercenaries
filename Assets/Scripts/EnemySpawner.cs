@@ -9,20 +9,38 @@ public class EnemySpawner : MonoBehaviour
 
     [Header("스폰 설정")]
     public GameObject enemyPrefab;
-    public int enemiesPerWave = 5;      // 한 웨이브당 스폰할 적 수
+    public int baseEnemiesPerWave = 5;   // 1일차 웨이브당 적 수 (기준값)
 
     [Header("웨이브 타이밍")]
-    public float waveDuration = 10f;    // 한 웨이브 총 시간
-    public float spawnDuration = 6f;    // 이 시간 안에 몬스터 다 스폰
+    public float waveDuration = 10f;
+    public float spawnDuration = 6f;
 
     [Header("스폰 위치 범위")]
     public float spawnWidth = 4f;
 
+    [Header("난이도 상승 (Day별) — 값은 직접 조정")]
+    public int enemiesAddPerDay = 0;        // Day마다 웨이브당 적 수 +이만큼
+    public float healthAddPerDay = 0f;      // Day마다 적 체력 +이만큼 (프리팹 기본체력에 가산)
+
     private int currentWave = 0;
     private bool allWavesSpawned = false;
+    private int currentDay = 1;
 
-    void Start()
+    // 이번 날 적용될 웨이브당 적 수 (Day에 따라 계산됨)
+    private int enemiesPerWave;
+
+    // 하루(3웨이브) 시작
+    public void StartDay(int day)
     {
+        currentDay = day;
+
+        // Day별 적 수 계산 (day=1이면 기준값 그대로). 체력은 스폰 시 프리팹 기준으로 계산.
+        enemiesPerWave = baseEnemiesPerWave + enemiesAddPerDay * (day - 1);
+
+        currentWave = 0;
+        allWavesSpawned = false;
+
+        StopAllCoroutines();          // 혹시 이전 코루틴 남아있으면 정리
         StartCoroutine(SpawnWaves());
     }
 
@@ -36,9 +54,8 @@ public class EnemySpawner : MonoBehaviour
             if (waveText != null)
                 waveText.text = "웨이브 " + currentWave + " / " + totalWaves;
 
-            Debug.Log("웨이브 " + currentWave + " / " + totalWaves);
+            Debug.Log($"[Day {currentDay}] 웨이브 {currentWave}/{totalWaves} (적 {enemiesPerWave}마리)");
 
-            // 스폰 간격 = 스폰 시간 / 몬스터 수 (6초 안에 균등 분배)
             float spawnInterval = (enemiesPerWave > 0) ? spawnDuration / enemiesPerWave : 0f;
 
             for (int i = 0; i < enemiesPerWave; i++)
@@ -47,10 +64,9 @@ public class EnemySpawner : MonoBehaviour
                 yield return new WaitForSeconds(spawnInterval);
             }
 
-            // 마지막 웨이브가 아니면, 웨이브 총 시간(10초)에서 스폰 시간(6초) 뺀 만큼 대기
             if (currentWave < totalWaves)
             {
-                float remainingTime = waveDuration - spawnDuration;   // 10 - 6 = 4초
+                float remainingTime = waveDuration - spawnDuration;
                 if (remainingTime > 0f)
                     yield return new WaitForSeconds(remainingTime);
             }
@@ -80,6 +96,15 @@ public class EnemySpawner : MonoBehaviour
                                        transform.position.y,
                                        transform.position.z);
 
-        Instantiate(enemyPrefab, spawnPos, enemyPrefab.transform.rotation);
+        GameObject enemy = Instantiate(enemyPrefab, spawnPos, enemyPrefab.transform.rotation);
+
+        // 프리팹 기본 체력 + Day 증가량을 이 적에 적용
+        EnemyHealth eh = enemy.GetComponent<EnemyHealth>();
+        if (eh != null)
+        {
+            int baseHp = eh.maxHealth;   // 프리팹이 들고 있는 기본 체력
+            int finalHp = Mathf.RoundToInt(baseHp + healthAddPerDay * (currentDay - 1));
+            eh.SetMaxHealth(finalHp);
+        }
     }
 }

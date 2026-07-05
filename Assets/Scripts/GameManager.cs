@@ -5,6 +5,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance; // 싱글톤 어디든지 참조 가능 ( 전역 )
 
+    [Header("Day")]
+    public int currentDay = 1;          // 현재 며칠째
+    public EnemySpawner spawner;        // 인스펙터에서 드래그
+
     [Header("스테이지 설정")]
     public int targetWave = 3; // 목표 웨이브 수 (3웨이브 = 1일)
 
@@ -28,7 +32,12 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
     }
-
+     void Start()
+    {
+        // 1일차 시작 (스포너는 이제 스스로 시작 안 하고 여기서 시작시킴)
+        if (spawner != null)
+            spawner.StartDay(currentDay);
+    }
     void Update()
     {
         // 클릭 대기 중이고, 마우스 클릭하면
@@ -125,7 +134,32 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("정비 UI 내려옴");
     }
+    // "다음 날로" 버튼이 호출
+    public void OnNextDayClicked()
+    {
+        // 1) AI 자동 강화 (주인공 제외 나머지)
+        if (UpgradeManager.Instance != null)
+            UpgradeManager.Instance.RunAIUpgrades();
 
+        // 2) 정비 UI 닫기
+        if (upgradePanel != null)
+            upgradePanel.SetActive(false);
+
+        // 3) 클릭 안내 텍스트도 혹시 켜져있으면 끄기
+        if (clickToContinueText != null)
+            clickToContinueText.SetActive(false);
+
+        // 4) 다음 날로
+        currentDay++;
+        currentState = GameState.Playing;   // 다시 플레이 상태로 (중요)
+        Time.timeScale = 1f;                // 혹시 멈춰있으면 재개
+
+        // 5) 스포너에 새 날 시작 지시
+        if (spawner != null)
+            spawner.StartDay(currentDay);
+
+        Debug.Log($"=== Day {currentDay} 시작 ===");
+    }
     void EndGame()
     {
         Time.timeScale = 0f;

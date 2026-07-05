@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   type: 2
   category: 0
-  displayName: "\uC801\uC911 \uC2DC \uBAAC\uC2A4\uD130\uC758 \uC774\uB3D9\uC18D\uB3C4
+  displayName: "\uB454\uD654 \uD654\uC0B4"
+  description: "\uC801\uC911 \uC2DC \uBAAC\uC2A4\uD130\uC758 \uC774\uB3D9\uC18D\uB3C4
     \uAC10\uC18C (2%)"
-  description: 
   icon: {fileID: 0}
   valuePerLevel: 0.02
   maxLevel: 5
