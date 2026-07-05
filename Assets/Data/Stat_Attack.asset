@@ -15,9 +15,9 @@ MonoBehaviour:
   type: 6
   category: 1
   displayName: "\uAE30\uBCF8 \uACF5\uACA9\uB825 \uC99D\uAC00"
-  description: "\uAE30\uBCF8 \uACF5\uACA9\uB825 \uC99D\uAC00 (2%)"
-  icon: {fileID: 0}
-  valuePerLevel: 0.2
-  maxLevel: 5
+  description: "\uAE30\uBCF8 \uACF5\uACA9\uB825 \uC99D\uAC00 (50%)"
+  icon: {fileID: 21300000, guid: 0b716ae5e5c89984f850a8627915f365, type: 3}
+  valuePerLevel: 0.5
+  maxLevel: 10
   baseCost: 5
   costPerLevel: 10

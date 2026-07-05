@@ -108,6 +108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Projectile
   speed: 10
   lifeTime: 2
+  piercing: 1
   rotationOffset: {x: 0, y: 0, z: 0}
 --- !u!65 &6395445229548998934
 BoxCollider:

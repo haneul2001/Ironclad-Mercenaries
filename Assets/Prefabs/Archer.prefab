@@ -131,9 +131,15 @@ MonoBehaviour:
   attackRange: 20
   attackDamage: 10
   attackInterval: 1
+  skill02Unlocked: 1
+  skill03Unlocked: 1
+  skill02Chance: 0.3
+  skill03Chance: 0.1
   projectilePrefab: {fileID: 4835401983984732278, guid: 4b66bf8d227f3d849b41952101146082, type: 3}
   firePoint: {fileID: 0}
-  attackAnimLength: 1
+  clip01Name: Attack01_BowAndArrow
+  clip02Name: Attack02_BowAndArrow
+  clip03Name: Attack03_BowAndArrow
 --- !u!1001 &250192208869132814
 PrefabInstance:
   m_ObjectHideFlags: 0

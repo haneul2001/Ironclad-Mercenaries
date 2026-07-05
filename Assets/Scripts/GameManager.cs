@@ -1,24 +1,26 @@
 using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance; // 싱글톤 어디든지 참조 가능 ( 전역 )
 
+    [Header("스테이지 설정")]
+    public int targetWave = 3; // 목표 웨이브 수 (3웨이브 = 1일)
+
     [Header("Day")]
     public int currentDay = 1;          // 현재 며칠째
     public EnemySpawner spawner;        // 인스펙터에서 드래그
-
-    [Header("스테이지 설정")]
-    public int targetWave = 3; // 목표 웨이브 수 (3웨이브 = 1일)
+    public TMP_Text dayText;            // "DAY N" 표시
 
     [Header("UI 패널")]
     public GameObject victoryPanel;
     public GameObject defeatPanel;
-    public UpgradeMenuController upgradeMenu;   // 인스펙터에서 드래그
 
     [Header("정비 UI")]
     public GameObject upgradePanel;
+    public UpgradeMenuController upgradeMenu;   // 정비소 패널 관리
 
     [Header("클릭 안내 텍스트")]
     public GameObject clickToContinueText; // "아무 곳이나 클릭하시오"
@@ -33,12 +35,16 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
     }
-     void Start()
+
+    void Start()
     {
+        UpdateDayText();
+
         // 1일차 시작 (스포너는 이제 스스로 시작 안 하고 여기서 시작시킴)
         if (spawner != null)
             spawner.StartDay(currentDay);
     }
+
     void Update()
     {
         // 클릭 대기 중이고, 마우스 클릭하면
@@ -48,12 +54,16 @@ public class GameManager : MonoBehaviour
             OnVictoryClicked();
         }
 
-
-
-            // ── 디버깅용 배속 ──
+        // ── 디버깅용 배속 ──
         if (Input.GetKeyDown(KeyCode.Alpha1)) Time.timeScale = 1f;   // 1번키: 정상
         if (Input.GetKeyDown(KeyCode.Alpha2)) Time.timeScale = 2f;   // 2번키: 2배속
         if (Input.GetKeyDown(KeyCode.Alpha3)) Time.timeScale = 4f;   // 3번키: 4배속
+    }
+
+    void UpdateDayText()
+    {
+        if (dayText != null)
+            dayText.text = "DAY " + currentDay;
     }
 
     public void OnCoreDestroyed()
@@ -121,22 +131,23 @@ public class GameManager : MonoBehaviour
         // 3) 빅토리 패널 끄기
         if (victoryPanel != null) victoryPanel.SetActive(false);
 
-        // 4) 정비 UI 켜고 내려오기
+        // 4) 정비 UI 켜고, 선택 메뉴만 내려오기 (강화 패널들은 숨은 채로)
         if (upgradePanel != null)
         {
             upgradePanel.SetActive(true);
-            SlideInPanel[] slides = upgradePanel.GetComponentsInChildren<SlideInPanel>();
-            foreach(SlideInPanel s in slides) s.SlideDown();
+
+            if (upgradeMenu != null && upgradeMenu.selectMenu != null)
+                upgradeMenu.selectMenu.SlideDown();
         }
 
         // 정비소 진입 → 각 유닛에 예산 지급
         if (UpgradeManager.Instance != null)
-            UpgradeManager.Instance.GrantBudgets(); // 예산 지급 
+            UpgradeManager.Instance.GrantBudgets();
 
         Debug.Log("정비 UI 내려옴");
     }
+
     // "다음 날로" 버튼이 호출
-     // "다음 날로" 버튼이 호출
     public void OnNextDayClicked()
     {
         // 1) AI 자동 강화 (주인공 제외 나머지)
@@ -156,6 +167,7 @@ public class GameManager : MonoBehaviour
 
         // 4) 다음 날로
         currentDay++;
+        UpdateDayText();
         currentState = GameState.Playing;
         Time.timeScale = 1f;
 
@@ -165,7 +177,7 @@ public class GameManager : MonoBehaviour
 
         Debug.Log($"=== Day {currentDay} 시작 ===");
     }
-    
+
     void EndGame()
     {
         Time.timeScale = 0f;

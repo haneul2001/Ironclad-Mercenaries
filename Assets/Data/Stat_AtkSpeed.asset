@@ -15,9 +15,9 @@ MonoBehaviour:
   type: 7
   category: 1
   displayName: "\uACF5\uACA9 \uCFE8\uD0C0\uC784 \uAC10\uC18C"
-  description: "\uACF5\uACA9 \uCFE8\uD0C0\uC784 \uAC10\uC18C (0.1\uCD08)"
-  icon: {fileID: 0}
-  valuePerLevel: 0.1
+  description: "\uACF5\uACA9 \uCFE8\uD0C0\uC784 \uAC10\uC18C (0.2\uCD08)"
+  icon: {fileID: 21300000, guid: b9e92a4450b4a2941bdeb86b97107874, type: 3}
+  valuePerLevel: 0.2
   maxLevel: 5
   baseCost: 5
   costPerLevel: 10

@@ -16,7 +16,7 @@ MonoBehaviour:
   category: 0
   displayName: "\uC2A4\uD0AC2 \uAC15\uD654"
   description: "\uC2A4\uD0AC2 \uD655\uB960 \uC99D\uAC00 (10%)"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 1c22e93552c1a234baad481c9288d867, type: 3}
   valuePerLevel: 0.1
   maxLevel: 5
   baseCost: 20

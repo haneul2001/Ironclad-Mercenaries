@@ -19,6 +19,7 @@ public class UpgradeManager : MonoBehaviour
     [Header("예산 / 비용")]
     public int budgetPerUnit = 20;   // 정비소 진입 시 유닛마다 지급
     public int traitEntryCost = 20;  // 특성 강화 진입료
+     public int budgetAddPerDay = 5;   // Day마다 예산 추가 (Day1=기본, Day2=+5...)
 
     [Header("강화 정의 목록 (SO)")]
     public List<UpgradeData> commonTraits = new List<UpgradeData>();  // 전사·마법사 공용 특성
@@ -61,12 +62,16 @@ public class UpgradeManager : MonoBehaviour
     // ─────────────────────────────────────────────
     //  1) 정비소 진입 시: 모든 유닛에 예산 지급
     // ─────────────────────────────────────────────
-    public void GrantBudgets()
+     public void GrantBudgets()
     {
-        GetWallet(archer)?.GrantBudget(budgetPerUnit);
-        GetWallet(warrior)?.GrantBudget(budgetPerUnit);
-        GetWallet(mage)?.GrantBudget(budgetPerUnit);
-        Debug.Log($"[정비소] 각 유닛에 {budgetPerUnit}원 지급");
+        // Day에 따라 예산 증가 (Day1이면 기본, Day2면 +5, ...)
+        int day = (GameManager.Instance != null) ? GameManager.Instance.currentDay : 1;
+        int budget = budgetPerUnit + budgetAddPerDay * (day - 1);
+
+        GetWallet(archer)?.GrantBudget(budget);
+        GetWallet(warrior)?.GrantBudget(budget);
+        GetWallet(mage)?.GrantBudget(budget);
+        Debug.Log($"[정비소] Day {day} - 각 유닛에 {budget}원 지급");
     }
 
     // ─────────────────────────────────────────────
@@ -196,8 +201,53 @@ public class UpgradeManager : MonoBehaviour
         return result;
     }
 
+    [Header("도박")]
+    public int gambleCost = 5;
 
+    public struct GambleResult
+    {
+        public bool success;
+        public int dice;
+        public int reward;
+    }
 
+    public GambleResult TryGamble()
+    {
+        GambleResult result = new GambleResult();
+
+        UnitAttack h = hero;
+        if (h == null) { result.success = false; return result; }
+
+        UnitWallet wallet = GetWallet(h);
+
+        if (!wallet.CanAfford(gambleCost))
+        {
+            result.success = false;
+            Debug.Log($"도박 골드 부족 (보유 {wallet.Gold}/{gambleCost})");
+            return result;
+        }
+
+        wallet.Spend(gambleCost);
+
+        int dice = Random.Range(1, 7);   // 1~6
+        int reward = 0;
+        switch (dice)
+        {
+            case 4: reward = 10; break;
+            case 5: reward = 15; break;
+            case 6: reward = 20; break;
+            default: reward = 0; break;
+        }
+
+        if (reward > 0) wallet.Add(reward);
+
+        result.success = true;
+        result.dice = dice;
+        result.reward = reward;
+
+        Debug.Log($"도박: 주사위 {dice} → {(reward > 0 ? reward + "원 획득" : "꽝")}");
+        return result;
+    }
 
 
       

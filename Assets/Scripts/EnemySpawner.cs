@@ -20,7 +20,7 @@ public class EnemySpawner : MonoBehaviour
 
     [Header("난이도 상승 (Day별) — 값은 직접 조정")]
     public int enemiesAddPerDay = 0;        // Day마다 웨이브당 적 수 +이만큼
-    public float healthAddPerDay = 0f;      // Day마다 적 체력 +이만큼 (프리팹 기본체력에 가산)
+    public float healthAddPerDay = 0f;      // Day마다 적 체력 +이만큼 (프리팹 기본체력에 곱)
 
     private int currentWave = 0;
     private bool allWavesSpawned = false;
@@ -103,7 +103,7 @@ public class EnemySpawner : MonoBehaviour
         if (eh != null)
         {
             int baseHp = eh.maxHealth;   // 프리팹이 들고 있는 기본 체력
-            int finalHp = Mathf.RoundToInt(baseHp + healthAddPerDay * (currentDay - 1));
+            int finalHp = Mathf.RoundToInt(baseHp + baseHp * healthAddPerDay * (currentDay - 1));
             eh.SetMaxHealth(finalHp);
         }
     }
