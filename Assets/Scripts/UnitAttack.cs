@@ -4,6 +4,8 @@ using System.Collections.Generic;
 // abstract = 이 클래스 자체로는 못 쓰고, 상속받아서만 사용
 public abstract class UnitAttack : MonoBehaviour
 {
+    [Header("UI")]
+    public Sprite portrait;
     [Header("공통 공격 스탯")]
     public float attackRange = 3f;
     public int attackDamage = 10;

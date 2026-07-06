@@ -1,18 +1,25 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance; // 싱글톤 어디든지 참조 가능 ( 전역 )
+    public static GameManager Instance;
 
     [Header("스테이지 설정")]
-    public int targetWave = 3; // 목표 웨이브 수 (3웨이브 = 1일)
+    public int targetWave = 3;
+
+    public GameObject heroSelectPanel;
 
     [Header("Day")]
-    public int currentDay = 1;          // 현재 며칠째
-    public EnemySpawner spawner;        // 인스펙터에서 드래그
-    public TMP_Text dayText;            // "DAY N" 표시
+    public int currentDay = 1;
+    public EnemySpawner spawner;
+    public TMP_Text dayText;
+
+    [Header("카운트다운")]
+    public Image countdownImage;        // 카운트다운 표시할 Image
+    public Sprite[] countdownSprites;   // [0]=3, [1]=2, [2]=1, [3]=시작!
 
     [Header("UI 패널")]
     public GameObject victoryPanel;
@@ -20,16 +27,15 @@ public class GameManager : MonoBehaviour
 
     [Header("정비 UI")]
     public GameObject upgradePanel;
-    public UpgradeMenuController upgradeMenu;   // 정비소 패널 관리
+    public UpgradeMenuController upgradeMenu;
 
     [Header("클릭 안내 텍스트")]
-    public GameObject clickToContinueText; // "아무 곳이나 클릭하시오"
+    public GameObject clickToContinueText;
 
-    // 게임 상태
     public enum GameState { Playing, Victory, Defeat }
     public GameState currentState = GameState.Playing;
 
-    private bool waitingForClick = false; // 클릭 대기 중인지
+    private bool waitingForClick = false;
 
     void Awake()
     {
@@ -40,24 +46,69 @@ public class GameManager : MonoBehaviour
     {
         UpdateDayText();
 
-        // 1일차 시작 (스포너는 이제 스스로 시작 안 하고 여기서 시작시킴)
+        if (heroSelectPanel != null)
+        {
+            heroSelectPanel.SetActive(true);
+            Time.timeScale = 0f;   // 선택 전 완전 정지
+        }
+        else
+        {
+            StartFirstDay();
+        }
+    }
+
+    // 선택창에서 주인공 고른 뒤 호출 → 카운트다운 후 전투 시작
+    public void StartFirstDay()
+    {
+        if (heroSelectPanel != null)
+            heroSelectPanel.SetActive(false);
+
+        StartCoroutine(CountdownThenStartDay());
+    }
+
+    // 카운트다운(3,2,1,시작!) 후 해당 날 전투 시작. 시작/다음날 공용.
+    private IEnumerator CountdownThenStartDay()
+    {
+        Time.timeScale = 0f;   // 카운트다운 중엔 멈춤
+
+        if (countdownImage != null)
+            countdownImage.gameObject.SetActive(true);
+
+        int[] order = { 0, 1, 2 };   // 스프라이트 인덱스 (3, 2, 1)
+        foreach (int idx in order)
+        {
+            if (countdownImage != null && countdownSprites != null && idx < countdownSprites.Length)
+                countdownImage.sprite = countdownSprites[idx];
+            yield return new WaitForSecondsRealtime(1f);
+        }
+
+        // "시작!" 표시 (스프라이트 4개면)
+        if (countdownImage != null && countdownSprites != null && countdownSprites.Length >= 4)
+        {
+            countdownImage.sprite = countdownSprites[3];
+            yield return new WaitForSecondsRealtime(0.6f);
+        }
+
+        if (countdownImage != null)
+            countdownImage.gameObject.SetActive(false);
+
+        // 전투 시작
+        Time.timeScale = 1f;
         if (spawner != null)
             spawner.StartDay(currentDay);
     }
 
     void Update()
     {
-        // 클릭 대기 중이고, 마우스 클릭하면
         if (waitingForClick && Input.GetMouseButtonDown(0))
         {
             waitingForClick = false;
             OnVictoryClicked();
         }
 
-        // ── 디버깅용 배속 ──
-        if (Input.GetKeyDown(KeyCode.Alpha1)) Time.timeScale = 1f;   // 1번키: 정상
-        if (Input.GetKeyDown(KeyCode.Alpha2)) Time.timeScale = 2f;   // 2번키: 2배속
-        if (Input.GetKeyDown(KeyCode.Alpha3)) Time.timeScale = 4f;   // 3번키: 4배속
+        if (Input.GetKeyDown(KeyCode.Alpha1)) Time.timeScale = 1f;
+        if (Input.GetKeyDown(KeyCode.Alpha2)) Time.timeScale = 2f;
+        if (Input.GetKeyDown(KeyCode.Alpha3)) Time.timeScale = 4f;
     }
 
     void UpdateDayText()
@@ -85,10 +136,8 @@ public class GameManager : MonoBehaviour
 
     IEnumerator VictorySequence()
     {
-        // 마지막 몬스터 죽고 3초 대기
         yield return new WaitForSeconds(3f);
 
-        // 빅토리 이미지 내려옴
         if (victoryPanel != null)
         {
             victoryPanel.SetActive(true);
@@ -96,20 +145,16 @@ public class GameManager : MonoBehaviour
             if (slide != null) slide.SlideDown();
         }
 
-        // 내려온 후 2초 대기
         yield return new WaitForSeconds(2f);
 
-        // "아무 곳이나 클릭하시오" 텍스트 표시
         if (clickToContinueText != null)
             clickToContinueText.SetActive(true);
 
-        // 클릭 대기 시작
         waitingForClick = true;
     }
 
     void OnVictoryClicked()
     {
-        // 클릭 텍스트 즉시 끄기
         if (clickToContinueText != null)
             clickToContinueText.SetActive(false);
 
@@ -118,20 +163,16 @@ public class GameManager : MonoBehaviour
 
     IEnumerator ToUpgradeSequence()
     {
-        // 1) 빅토리 이미지 올라감 (사라짐)
         if (victoryPanel != null)
         {
             SlideInPanel slide = victoryPanel.GetComponentInChildren<SlideInPanel>();
             if (slide != null) slide.SlideUp();
         }
 
-        // 2) 올라가는 시간 대기 (SlideInPanel duration이랑 맞추기)
         yield return new WaitForSecondsRealtime(0.5f);
 
-        // 3) 빅토리 패널 끄기
         if (victoryPanel != null) victoryPanel.SetActive(false);
 
-        // 4) 정비 UI 켜고, 선택 메뉴만 내려오기 (강화 패널들은 숨은 채로)
         if (upgradePanel != null)
         {
             upgradePanel.SetActive(true);
@@ -140,7 +181,6 @@ public class GameManager : MonoBehaviour
                 upgradeMenu.selectMenu.SlideDown();
         }
 
-        // 정비소 진입 → 각 유닛에 예산 지급
         if (UpgradeManager.Instance != null)
             UpgradeManager.Instance.GrantBudgets();
 
@@ -150,11 +190,11 @@ public class GameManager : MonoBehaviour
     // "다음 날로" 버튼이 호출
     public void OnNextDayClicked()
     {
-        // 1) AI 자동 강화 (주인공 제외 나머지)
+        // 1) AI 자동 강화
         if (UpgradeManager.Instance != null)
             UpgradeManager.Instance.RunAIUpgrades();
 
-        // 2) 정비소 패널들 리셋 (열려있던 강화창 정리)
+        // 2) 정비소 패널들 리셋
         if (upgradeMenu != null)
             upgradeMenu.ResetPanels();
 
@@ -169,11 +209,9 @@ public class GameManager : MonoBehaviour
         currentDay++;
         UpdateDayText();
         currentState = GameState.Playing;
-        Time.timeScale = 1f;
 
-        // 5) 스포너에 새 날 시작
-        if (spawner != null)
-            spawner.StartDay(currentDay);
+        // 5) 카운트다운 후 새 날 시작
+        StartCoroutine(CountdownThenStartDay());
 
         Debug.Log($"=== Day {currentDay} 시작 ===");
     }
