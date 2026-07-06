@@ -9,7 +9,7 @@ public class EnemySpawner : MonoBehaviour
 
     [Header("스폰 설정")]
     public GameObject enemyPrefab;
-    public int baseEnemiesPerWave = 5;   // 1일차 웨이브당 적 수 (기준값)
+    public int baseEnemiesPerWave = 5;
 
     [Header("웨이브 타이밍")]
     public float waveDuration = 10f;
@@ -18,29 +18,29 @@ public class EnemySpawner : MonoBehaviour
     [Header("스폰 위치 범위")]
     public float spawnWidth = 4f;
 
-    [Header("난이도 상승 (Day별) — 값은 직접 조정")]
-    public int enemiesAddPerDay = 0;        // Day마다 웨이브당 적 수 +이만큼
-    public float healthAddPerDay = 0f;      // Day마다 적 체력 +이만큼 (프리팹 기본체력에 곱)
+    [Header("난이도 상승 (Day별)")]
+    public int enemiesAddPerDay = 0;
+    public float healthAddPerDay = 0f;
+
+    [Header("보스")]
+    public GameObject bossPrefab;             // 보스 몬스터 프리팹
+    public int[] bossDays = { 10, 20, 30 };   // 보스 등장하는 날
+    public int bossBaseHp = 2000;             // 보스 기본 체력
 
     private int currentWave = 0;
     private bool allWavesSpawned = false;
     private int currentDay = 1;
-
-    // 이번 날 적용될 웨이브당 적 수 (Day에 따라 계산됨)
     private int enemiesPerWave;
 
-    // 하루(3웨이브) 시작
     public void StartDay(int day)
     {
         currentDay = day;
-
-        // Day별 적 수 계산 (day=1이면 기준값 그대로). 체력은 스폰 시 프리팹 기준으로 계산.
         enemiesPerWave = baseEnemiesPerWave + enemiesAddPerDay * (day - 1);
 
         currentWave = 0;
         allWavesSpawned = false;
 
-        StopAllCoroutines();          // 혹시 이전 코루틴 남아있으면 정리
+        StopAllCoroutines();
         StartCoroutine(SpawnWaves());
     }
 
@@ -58,10 +58,17 @@ public class EnemySpawner : MonoBehaviour
 
             float spawnInterval = (enemiesPerWave > 0) ? spawnDuration / enemiesPerWave : 0f;
 
+            // 일반 적 스폰
             for (int i = 0; i < enemiesPerWave; i++)
             {
                 SpawnOneEnemy();
                 yield return new WaitForSeconds(spawnInterval);
+            }
+
+            // 보스 날이고 마지막 웨이브면 보스 스폰
+            if (IsBossDay(currentDay) && currentWave == totalWaves)
+            {
+                SpawnBoss();
             }
 
             if (currentWave < totalWaves)
@@ -98,13 +105,40 @@ public class EnemySpawner : MonoBehaviour
 
         GameObject enemy = Instantiate(enemyPrefab, spawnPos, enemyPrefab.transform.rotation);
 
-        // 프리팹 기본 체력 + Day 증가량을 이 적에 적용
         EnemyHealth eh = enemy.GetComponent<EnemyHealth>();
         if (eh != null)
         {
-            int baseHp = eh.maxHealth;   // 프리팹이 들고 있는 기본 체력
+            int baseHp = eh.maxHealth;
             int finalHp = Mathf.RoundToInt(baseHp + baseHp * healthAddPerDay * (currentDay - 1));
             eh.SetMaxHealth(finalHp);
         }
+    }
+
+    void SpawnBoss()
+    {
+        if (bossPrefab == null) return;
+
+        float randomX = Random.Range(-spawnWidth, spawnWidth);
+        Vector3 spawnPos = new Vector3(transform.position.x + randomX,
+                                       transform.position.y,
+                                       transform.position.z);
+
+        GameObject boss = Instantiate(bossPrefab, spawnPos, bossPrefab.transform.rotation);
+
+        EnemyHealth eh = boss.GetComponent<EnemyHealth>();
+        if (eh != null)
+        {
+            int finalHp = Mathf.RoundToInt(bossBaseHp + bossBaseHp * healthAddPerDay * (currentDay - 1));
+            eh.SetMaxHealth(finalHp);
+        }
+
+        Debug.Log($"[Day {currentDay}] 보스 등장!");
+    }
+
+    private bool IsBossDay(int day)
+    {
+        foreach (int d in bossDays)
+            if (d == day) return true;
+        return false;
     }
 }
