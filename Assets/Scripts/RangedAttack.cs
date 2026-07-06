@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class RangedAttack : UnitAttack
 {
+      public AudioSource audioSource;   // 인스펙터에서 연결
+    public AudioClip shootClip;
     [Header("원거리 전용")]
     public GameObject projectilePrefab;
     public Transform firePoint;
@@ -79,6 +81,8 @@ public class RangedAttack : UnitAttack
         GameObject arrow = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
         Projectile proj = arrow.GetComponent<Projectile>();
          if (proj != null) proj.Setup(dir, attackDamage, arrowVulnerable, arrowSlow);
+           if (audioSource != null && shootClip != null)
+            audioSource.PlayOneShot(shootClip); 
     }
 
     protected override void OnAttackStatsChanged() { }

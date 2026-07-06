@@ -17,15 +17,16 @@ public class EnemySpawner : MonoBehaviour
 
     [Header("스폰 위치 범위")]
     public float spawnWidth = 4f;
+    public float bossSpawnYOffset = 0f;
 
     [Header("난이도 상승 (Day별)")]
     public int enemiesAddPerDay = 0;
-    public float healthAddPerDay = 0f;
+    public float healthGrowthPerDay = 1.5f;   // 하루마다 체력 배율 (1.5 = 매일 1.5배, 지수 증가)
 
     [Header("보스")]
-    public GameObject bossPrefab;             // 보스 몬스터 프리팹
-    public int[] bossDays = { 10, 20, 30 };   // 보스 등장하는 날
-    public int bossBaseHp = 2000;             // 보스 기본 체력
+    public GameObject bossPrefab;
+    public int[] bossDays = { 10, 20, 30 };
+    public int bossBaseHp = 2000;
 
     private int currentWave = 0;
     private bool allWavesSpawned = false;
@@ -58,14 +59,12 @@ public class EnemySpawner : MonoBehaviour
 
             float spawnInterval = (enemiesPerWave > 0) ? spawnDuration / enemiesPerWave : 0f;
 
-            // 일반 적 스폰
             for (int i = 0; i < enemiesPerWave; i++)
             {
                 SpawnOneEnemy();
                 yield return new WaitForSeconds(spawnInterval);
             }
 
-            // 보스 날이고 마지막 웨이브면 보스 스폰
             if (IsBossDay(currentDay) && currentWave == totalWaves)
             {
                 SpawnBoss();
@@ -109,8 +108,9 @@ public class EnemySpawner : MonoBehaviour
         if (eh != null)
         {
             int baseHp = eh.maxHealth;
-            int finalHp = Mathf.RoundToInt(baseHp + baseHp * healthAddPerDay * (currentDay - 1));
-            eh.SetMaxHealth(finalHp);
+            // 하루마다 healthGrowthPerDay배씩 (지수 증가): baseHp × 배율^(day-1)
+            float finalHpF = baseHp * Mathf.Pow(healthGrowthPerDay, currentDay - 1);
+            eh.SetMaxHealth(Mathf.RoundToInt(finalHpF));
         }
     }
 
@@ -118,9 +118,8 @@ public class EnemySpawner : MonoBehaviour
     {
         if (bossPrefab == null) return;
 
-        float randomX = Random.Range(-spawnWidth, spawnWidth);
-        Vector3 spawnPos = new Vector3(transform.position.x + randomX,
-                                       transform.position.y,
+        Vector3 spawnPos = new Vector3(transform.position.x,
+                                       transform.position.y + bossSpawnYOffset,
                                        transform.position.z);
 
         GameObject boss = Instantiate(bossPrefab, spawnPos, bossPrefab.transform.rotation);
@@ -128,9 +127,19 @@ public class EnemySpawner : MonoBehaviour
         EnemyHealth eh = boss.GetComponent<EnemyHealth>();
         if (eh != null)
         {
-            int finalHp = Mathf.RoundToInt(bossBaseHp + bossBaseHp * healthAddPerDay * (currentDay - 1));
+            // 날짜별 체력 배율: 10일차=1배, 20일차=100배, 30일차=10000배
+            float dayMultiplier = 1f;
+            if (currentDay >= 30)
+                dayMultiplier = 10000f;
+            else if (currentDay >= 20)
+                dayMultiplier = 100f;
+
+            int finalHp = Mathf.RoundToInt(bossBaseHp * dayMultiplier);
             eh.SetMaxHealth(finalHp);
         }
+
+        if (BossHealthBar.Instance != null && eh != null)
+            BossHealthBar.Instance.ShowBoss(eh);
 
         Debug.Log($"[Day {currentDay}] 보스 등장!");
     }

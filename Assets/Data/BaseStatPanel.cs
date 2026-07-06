@@ -3,12 +3,9 @@ using UnityEngine.UI;
 using TMPro;
 
 // 능력치 강화 패널. 주인공(hero)에게만 적용.
-// 강화 버튼 2개(공격력/공속) + 현재 스탯 요약 + 주인공 초상화 표시.
+// 강화 버튼 2개(공격력/공속) + 현재 스탯 요약(한 텍스트) + 주인공 초상화.
 //
-// 화면 라벨 ↔ 코드 대응:
-//   화면 "스킬1" = 코드 어택2 (skill02Chance, GetDisplayDamage(2))
-//   화면 "스킬2" = 코드 어택3 (skill03Chance, GetDisplayDamage(3))
-//   화면 "공격력" = 코드 어택1 기본 (GetDisplayDamage(1))
+// 명칭: 어택1 = 기본 공격, 어택2 = 스킬1, 어택3 = 스킬2
 public class BaseStatPanel : MonoBehaviour
 {
     [Header("공격력 강화")]
@@ -22,15 +19,10 @@ public class BaseStatPanel : MonoBehaviour
     public UpgradeData speedData;
 
     [Header("초상화")]
-    public Image portraitImage;   // 주인공 초상화 자리
+    public Image portraitImage;
 
-    [Header("현재 스탯 표시 (선택)")]
-    public TMP_Text skill2ChanceText;   // 화면 "스킬1 확률" = 어택2 확률
-    public TMP_Text skill3ChanceText;   // 화면 "스킬2 확률" = 어택3 확률
-    public TMP_Text skill1DmgText;      // 화면 "공격력" = 어택1 기본
-    public TMP_Text skill2DmgText;      // 화면 "스킬1 공격력" = 어택2
-    public TMP_Text skill3DmgText;      // 화면 "스킬2 공격력" = 어택3
-    public TMP_Text cooldownText;       // 공격 쿨타임
+    [Header("스탯 표시 (하나로)")]
+    public TMP_Text statText;   // 모든 스탯을 여기 한 번에 표시
 
     void OnEnable()
     {
@@ -77,21 +69,17 @@ public class BaseStatPanel : MonoBehaviour
         UpdateButton(attackButton, attackButtonText, attackData, hero, "기본 공격력 강화");
         UpdateButton(speedButton, speedButtonText, speedData, hero, "공격 쿨타임 감소");
 
-        // 스탯 요약 갱신 (화면 라벨 기준)
-        if (skill2ChanceText != null)
-            skill2ChanceText.text = $"스킬1 확률: {hero.skill02Chance * 100f:F0}%";
-        if (skill3ChanceText != null)
-            skill3ChanceText.text = $"스킬2 확률: {hero.skill03Chance * 100f:F0}%";
-
-        if (skill1DmgText != null)
-            skill1DmgText.text = $"공격력: {hero.GetDisplayDamage(1)}";
-        if (skill2DmgText != null)
-            skill2DmgText.text = $"스킬1 공격력: {hero.GetDisplayDamage(2)}";
-        if (skill3DmgText != null)
-            skill3DmgText.text = $"스킬2 공격력: {hero.GetDisplayDamage(3)}";
-
-        if (cooldownText != null)
-            cooldownText.text = $"공격 쿨타임: {hero.attackInterval:F2}초";
+        // 스탯 요약 (한 텍스트로)
+        if (statText != null)
+        {
+            statText.text =
+                $"기본 공격력\t{hero.GetDisplayDamage(1)}\n" +
+                $"스킬1 공격력\t{hero.GetDisplayDamage(2)}\n" +
+                $"스킬1 확률\t{hero.skill02Chance * 100f:F0}%\n" +
+                $"스킬2 공격력\t{hero.GetDisplayDamage(3)}\n" +
+                $"스킬2 확률\t{hero.skill03Chance * 100f:F0}%\n" +
+                $"공격 쿨타임\t{hero.attackInterval:F2}초";
+        }
     }
 
     private void UpdateButton(Button btn, TMP_Text txt, UpgradeData data, UnitAttack hero, string label)

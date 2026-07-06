@@ -3,16 +3,33 @@ using UnityEngine.SceneManagement;
 
 public class TitleController : MonoBehaviour
 {
-    // 시작 버튼 OnClick에 연결 (이미 연결돼 있음)
+    [Header("튜토리얼")]
+    public GameObject tutorialPanel;   // 튜토리얼 페이지 패널
+
+    // 게임 시작 버튼 OnClick
     public void OnStartClicked()
     {
         if (FadeController.Instance != null)
             FadeController.Instance.FadeToScene("GameScene");
         else
-            SceneManager.LoadScene("GameScene");   // 페이드 없을 때 폴백
+            SceneManager.LoadScene("GameScene");
     }
 
-    // 종료 버튼 만들면 연결 (선택)
+    // 튜토리얼 버튼 OnClick → 페이지 열기
+    public void OnTutorialClicked()
+    {
+        if (tutorialPanel != null)
+            tutorialPanel.SetActive(true);
+    }
+
+    // 튜토리얼 닫기 버튼 OnClick → 페이지 닫기
+    public void OnTutorialClose()
+    {
+        if (tutorialPanel != null)
+            tutorialPanel.SetActive(false);
+    }
+
+    // 나가기 버튼 OnClick
     public void OnQuitClicked()
     {
         Application.Quit();

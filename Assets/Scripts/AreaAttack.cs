@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class AreaAttack : UnitAttack
 {
+    public AudioSource audioSource;   // 인스펙터에서 연결
+    public AudioClip shootClip;   
     [Header("스킬별 폭발 반경")]
     public float radius01 = 1.5f;   // 스킬1 기본
     public float radius02 = 2.5f;   // 스킬2 큰 장판
@@ -133,6 +135,10 @@ public class AreaAttack : UnitAttack
             {
                 enemy.TakeDamage(damage);
             }
+        }
+        if (audioSource != null && shootClip != null)
+        {
+            audioSource.PlayOneShot(shootClip);
         }
     }
 
